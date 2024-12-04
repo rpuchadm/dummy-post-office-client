@@ -1,5 +1,3 @@
-import "bootswatch/dist/materia/bootstrap.css"
-
 import Layout from "./components/layout/Layout"
 
 function App() {
