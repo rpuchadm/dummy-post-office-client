@@ -1,0 +1,83 @@
+import React, { useEffect, useState } from "react"
+
+import Card from "react-bootstrap/Card"
+import ListGroup from "react-bootstrap/ListGroup"
+import Spinner from "react-bootstrap/Spinner"
+import { Link } from "react-router-dom"
+import AppCoinfig from "../../AppConfig"
+import Container from "react-bootstrap/esm/Container"
+import Row from "react-bootstrap/esm/Row"
+import Col from "react-bootstrap/esm/Col"
+import { FaEnvelope } from "react-icons/fa"
+
+interface Message {
+  id: number
+  from: string
+  to: string
+  subject: string
+  content: string
+}
+
+const ListMessages = () => {
+  const [messages, setMessages] = useState<Message[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const url = AppCoinfig.API_BASE_URL + "messages"
+    const fetchMessages = async () => {
+      const response = await fetch(url)
+      const data = await response.json()
+      setMessages(data)
+      setLoading(false)
+    }
+
+    fetchMessages()
+  }, [])
+
+  return (
+    <>
+      <h1>
+        <FaEnvelope /> List Messages
+      </h1>
+      {loading ? (
+        <Spinner animation="border" role="status" />
+      ) : (
+        <ListGroup>
+          {messages.map((message) => (
+            <ListGroup.Item key={message.id}>
+              <Card>
+                <Card.Header>
+                  <FaEnvelope /> Message #{message.id}
+                </Card.Header>
+                <Card.Body>
+                  <Container>
+                    <Row>
+                      <Col md={6}>
+                        <strong>From:</strong> {message.from}
+                      </Col>
+                      <Col md={6}>
+                        <strong>To:</strong> {message.to}
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col>
+                        <strong>Subject:</strong> {message.subject}
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col>
+                        <small>{message.content}</small>
+                      </Col>
+                    </Row>
+                  </Container>
+                </Card.Body>
+              </Card>
+            </ListGroup.Item>
+          ))}
+        </ListGroup>
+      )}
+    </>
+  )
+}
+
+export default ListMessages
