@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react"
 
+import dayjs from "dayjs"
+
 import Card from "react-bootstrap/Card"
 import ListGroup from "react-bootstrap/ListGroup"
 import Spinner from "react-bootstrap/Spinner"
@@ -16,6 +18,7 @@ interface Message {
   to: string
   subject: string
   content: string
+  created_at: string
 }
 
 const ListMessages = () => {
@@ -47,7 +50,8 @@ const ListMessages = () => {
             <ListGroup.Item key={message.id}>
               <Card>
                 <Card.Header>
-                  <FaEnvelope /> Message #{message.id}
+                  <FaEnvelope /> Message #{message.id} -{" "}
+                  {dayjs(message.created_at).format("DD/MM/YYYY HH:mm")}
                 </Card.Header>
                 <Card.Body>
                   <Container>
