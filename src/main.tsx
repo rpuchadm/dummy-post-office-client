@@ -1,8 +1,9 @@
-import "bootswatch/dist/materia/bootstrap.css"
+import "bootstrap/dist/css/bootstrap.css"
+//import "bootswatch/dist/cyborg/bootstrap.css"
 
 import { StrictMode } from "react"
 import { createRoot } from "react-dom/client"
-import "./index.css"
+
 import App from "./App.tsx"
 
 createRoot(document.getElementById("root")!).render(

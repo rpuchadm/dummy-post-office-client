@@ -10,6 +10,7 @@ npm install react-icons
 npm install react-query
 npm install dayjs
 npm install bootswatch
+npm install bootstrap
 npm install prettier --save-dev
 
 npm install react-router-dom@6
