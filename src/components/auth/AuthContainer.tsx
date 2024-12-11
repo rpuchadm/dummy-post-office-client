@@ -15,7 +15,9 @@ interface AuthFormProps {
   error: string
   isLoading: boolean
   handleToken: (e: React.ChangeEvent<HTMLInputElement>) => void
-  handleSubmit: (ev: any) => Promise<void>
+  handleSubmit: (
+    ev: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>
+  ) => Promise<void>
 }
 
 const AuthForm = ({
@@ -89,7 +91,9 @@ const AuthContainer = ({ children }: AuthContainerProps) => {
   const handleToken = (e: React.ChangeEvent<HTMLInputElement>) => {
     setToken(e.target.value)
   }
-  const handleSubmit = async (ev) => {
+  const handleSubmit = async (
+    ev: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>
+  ) => {
     ev.preventDefault()
     localStorage.setItem(AppConfig.TOKEN_ITEM_NAME, token)
     setRefetch((prev) => prev + 1)

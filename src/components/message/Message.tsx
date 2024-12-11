@@ -38,7 +38,9 @@ const Message = ({}) => {
   const handleContent = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setContent(e.target.value)
   }
-  const handleSend = (ev) => {
+  const handleSend = (
+    ev: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>
+  ) => {
     ev.preventDefault()
     setIsLoading(true)
     const url = AppCoinfig.API_BASE_URL + "send"
