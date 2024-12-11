@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 
+import Alert from "react-bootstrap/Alert"
 import Button from "react-bootstrap/Button"
 import Col from "react-bootstrap/Col"
 import Container from "react-bootstrap/Container"
@@ -7,18 +8,21 @@ import Form from "react-bootstrap/Form"
 import Row from "react-bootstrap/Row"
 import Spinner from "react-bootstrap/Spinner"
 import AppConfig from "../../AppConfig"
+import { FaExclamationTriangle } from "react-icons/fa"
 
 interface AuthFormProps {
-  etoken: string
+  token: string
+  error: string
   isLoading: boolean
-  handleEToken: (e: React.ChangeEvent<HTMLInputElement>) => void
+  handleToken: (e: React.ChangeEvent<HTMLInputElement>) => void
   handleSubmit: (ev: any) => Promise<void>
 }
 
 const AuthForm = ({
-  etoken,
+  token,
+  error,
   isLoading,
-  handleEToken,
+  handleToken,
   handleSubmit,
 }: AuthFormProps) => {
   return (
@@ -37,8 +41,8 @@ const AuthForm = ({
             <Form.Group className="mb-3" controlId="formBasicToken">
               <Form.Label>Token</Form.Label>
               <Form.Control
-                value={etoken}
-                onChange={handleEToken}
+                value={token}
+                onChange={handleToken}
                 type="text"
                 placeholder="Enter token"
               />
@@ -47,10 +51,18 @@ const AuthForm = ({
         </Row>
         <Row>
           <Col>
+            {error && (
+              <>
+                <Alert variant="danger">
+                  <FaExclamationTriangle size={25}> </FaExclamationTriangle>{" "}
+                  {error}.
+                </Alert>
+              </>
+            )}
             <Button
               variant="primary"
               type="submit"
-              disabled={!etoken || isLoading}
+              disabled={!token || isLoading}
               onClick={handleSubmit}
             >
               Continue
@@ -67,53 +79,66 @@ interface AuthContainerProps {
 }
 
 const AuthContainer = ({ children }: AuthContainerProps) => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [token, setToken] = useState<string>(
     localStorage.getItem(AppConfig.TOKEN_ITEM_NAME) || ""
   )
-  const [etoken, setEToken] = useState<string>("")
   const [isLoading, setIsLoading] = useState(true)
-  const handleEToken = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEToken(e.target.value)
+  const [refetch, setRefetch] = useState<number>(0)
+  const [error, setError] = useState<string>("")
+  const handleToken = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setToken(e.target.value)
   }
   const handleSubmit = async (ev) => {
     ev.preventDefault()
-    localStorage.setItem(AppConfig.TOKEN_ITEM_NAME, etoken)
-    setToken(etoken)
+    localStorage.setItem(AppConfig.TOKEN_ITEM_NAME, token)
+    setRefetch((prev) => prev + 1)
   }
 
   useEffect(() => {
-    const lstoken = localStorage.getItem(AppConfig.TOKEN_ITEM_NAME)
     const fetchAuth = async () => {
+      console.log("fetchAuth")
       const url = AppConfig.API_BASE_URL + "auth"
       const response = await fetch(url, {
         method: "GET",
         credentials: "omit",
         headers: {
-          Authorization: `Bearer ${lstoken}`,
+          Authorization: `Bearer ${token}`,
         },
       })
-      const data = (await response.json()) as { status: string }
-      console.log("AuthContainer fetchAuth data:", data)
+      const data = (await response.json()) as { status: string; error: string }
       if (data.status === "success") {
         setToken(token)
+        setIsAuthenticated(true)
       } else {
+        if (isAuthenticated) {
+          setIsAuthenticated(false)
+        }
+        if (data.error) {
+          setError(data.error)
+        } else {
+          setError("An error occurred")
+        }
         localStorage.removeItem(AppConfig.TOKEN_ITEM_NAME)
       }
       setIsLoading(false)
     }
 
-    if (lstoken) {
+    if (token) {
       fetchAuth()
-    } else {
-      setIsLoading(false)
     }
-  }, [token])
+    setIsLoading(false)
+  }, [refetch])
 
   if (isLoading) {
     return <Spinner animation="border" role="status" />
   }
-  if (!token) {
-    return <AuthForm {...{ etoken, isLoading, handleEToken, handleSubmit }} />
+  if (!isAuthenticated) {
+    return (
+      <>
+        <AuthForm {...{ token, isLoading, error, handleToken, handleSubmit }} />
+      </>
+    )
   }
 
   return <>{children}</>
