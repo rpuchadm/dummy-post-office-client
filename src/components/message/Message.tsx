@@ -11,6 +11,13 @@ import Spinner from "react-bootstrap/Spinner"
 import { FaEnvelope, FaExclamationTriangle } from "react-icons/fa"
 import AppCoinfig from "../../AppConfig"
 
+interface Message {
+  from: string
+  to: string
+  subject: string
+  content: string
+}
+
 const Message = ({}) => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [message, setMessage] = useState<string>("")
@@ -35,29 +42,28 @@ const Message = ({}) => {
     ev.preventDefault()
     setIsLoading(true)
     const url = AppCoinfig.API_BASE_URL + "send"
-    const data = { from, to, subject, content }
-    fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Success:", data)
-        const { message, ...otherdata } = data
-        if (message) {
-          setMessage(message)
-        }
-        setIsLoading(false)
+    const message = { from, to, subject, content }
+    const sendMessage = async (message: Message) => {
+      const lstoken = localStorage.getItem(AppCoinfig.TOKEN_ITEM_NAME)
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${lstoken}`,
+        },
+        body: JSON.stringify(message),
       })
-      .catch((error) => {
-        console.error("Error:", error)
-        setError(error)
-        setIsLoading(false)
-      })
+      const data = await response.json()
+      if (response.status !== 200 || data.error) {
+        setError(data.error)
+      } else if (data.message) {
+        setMessage(data.message)
+      }
+      setIsLoading(false)
+    }
+    sendMessage(message)
   }
+
   return (
     <Form onSubmit={handleSend}>
       <Card>

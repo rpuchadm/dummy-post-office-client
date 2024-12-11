@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 
 import dayjs from "dayjs"
 
 import Card from "react-bootstrap/Card"
 import ListGroup from "react-bootstrap/ListGroup"
 import Spinner from "react-bootstrap/Spinner"
-import { Link } from "react-router-dom"
 import AppCoinfig from "../../AppConfig"
 import Container from "react-bootstrap/esm/Container"
 import Row from "react-bootstrap/esm/Row"
@@ -28,7 +27,14 @@ const ListMessages = () => {
   useEffect(() => {
     const url = AppCoinfig.API_BASE_URL + "messages"
     const fetchMessages = async () => {
-      const response = await fetch(url)
+      const lstoken = localStorage.getItem(AppCoinfig.TOKEN_ITEM_NAME)
+      const response = await fetch(url, {
+        method: "GET",
+        credentials: "omit",
+        headers: {
+          Authorization: `Bearer ${lstoken}`,
+        },
+      })
       const data = await response.json()
       setMessages(data)
       setLoading(false)
