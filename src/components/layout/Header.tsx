@@ -1,5 +1,3 @@
-import { Link } from "react-router-dom"
-
 import Container from "react-bootstrap/Container"
 import Nav from "react-bootstrap/Nav"
 import Navbar from "react-bootstrap/Navbar"
@@ -8,6 +6,11 @@ import NavDropdown from "react-bootstrap/NavDropdown"
 import AppConfig from "../../AppConfig"
 
 const Header = () => {
+  const logout = () => {
+    localStorage.removeItem(AppConfig.TOKEN_ITEM_NAME)
+    window.location.href = "/"
+  }
+
   return (
     <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary">
       <Container>
@@ -33,8 +36,8 @@ const Header = () => {
           </Nav>
           <Nav>
             <Nav.Link href="#deets">More deets</Nav.Link>
-            <Nav.Link eventKey={2} href="#memes">
-              Dank memes
+            <Nav.Link eventKey={2} onClick={logout}>
+              Log Out
             </Nav.Link>
           </Nav>
         </Navbar.Collapse>
