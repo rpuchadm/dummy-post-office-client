@@ -8,7 +8,7 @@ npm run build
 docker build -t vite-nginx-app .
 docker tag vite-nginx-app localhost:32000/dummy-post-office-vite-app:latest
 docker push localhost:32000/dummy-post-office-vite-app:latest
-
+microk8s kubectl rollout restart deploy dummy-post-office-vite-nginx-app -n dummy-post-office-namespace
 
 -----------------
 npm install react-bootstrap
@@ -17,6 +17,10 @@ npm install react-query ??????
 npm install dayjs
 npm install bootswatch
 npm install bootstrap
-npm install prettier --save-dev
+npm install --save-dev prettier
+npm install --save-dev sass
 
 npm install react-router-dom@6
+----------
+
+npm outdated

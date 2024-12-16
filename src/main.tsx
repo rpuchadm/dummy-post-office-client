@@ -1,5 +1,5 @@
-import "bootstrap/dist/css/bootstrap.css"
-//import "bootswatch/dist/cyborg/bootstrap.css"
+//import "bootstrap/dist/css/bootstrap.css"
+//import "bootswatch/dist/darkly/bootstrap.css"
 
 import { StrictMode } from "react"
 import { createRoot } from "react-dom/client"
