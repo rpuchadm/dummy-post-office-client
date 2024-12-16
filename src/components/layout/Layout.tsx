@@ -1,6 +1,6 @@
 import React from "react"
 
-import "bootswatch/dist/materia/bootstrap.css"
+import "bootswatch/dist/united/bootstrap.css"
 
 import Col from "react-bootstrap/Col"
 import Container from "react-bootstrap/Container"
