@@ -20,6 +20,8 @@ npm install bootstrap
 npm install --save-dev prettier
 npm install --save-dev sass
 
+npm install react@18 react-dom@18
+npm install --save-dev @types/react@18 @types/react-dom@18
 npm install react-router-dom@6
 ----------
 
