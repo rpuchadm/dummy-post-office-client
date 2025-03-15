@@ -1,3 +1,5 @@
+import "bootswatch/dist/united/bootstrap.css"
+
 import React from "react"
 
 import Button from "react-bootstrap/Button"
@@ -8,6 +10,7 @@ import Navbar from "react-bootstrap/Navbar"
 import NavDropdown from "react-bootstrap/NavDropdown"
 
 import AppConfig from "../../AppConfig"
+import { FaEnvelope, FaIndustry, FaSuitcaseRolling } from "react-icons/fa"
 
 const Header = () => {
   const [modalVisible, setModalVisible] = React.useState(false)
@@ -35,17 +38,15 @@ const Header = () => {
               <Nav.Link href="/about">About</Nav.Link>
               <Nav.Link href="/list">List Messages</Nav.Link>
               <Nav.Link href="/message">New Message</Nav.Link>
-              <NavDropdown title="Dropdown" id="collapsible-nav-dropdown">
-                <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.2">
-                  Another action
+              <NavDropdown title="Other Apps" id="collasible-nav-dropdown">
+                <NavDropdown.Item href="https://erp.mydomain.com/">
+                  <FaIndustry /> Corp ERP
                 </NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.3">
-                  Something
+                <NavDropdown.Item href="https://crm.mydomain.com/">
+                  <FaSuitcaseRolling /> CRM
                 </NavDropdown.Item>
-                <NavDropdown.Divider />
-                <NavDropdown.Item href="#action/3.4">
-                  Separated link
+                <NavDropdown.Item href="https://post.mydomain.com/">
+                  <FaEnvelope /> Post Office
                 </NavDropdown.Item>
               </NavDropdown>
             </Nav>
